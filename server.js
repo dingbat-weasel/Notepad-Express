@@ -20,23 +20,34 @@ app.get("/api/notes", (req, res) => res.json(db));
 
 app.post("/api/notes", (req, res) => {
   console.info(`${req.method} request received to add a note: ${req.body}`);
-  //receive new note
+
+  //destructure new note
   const { title, text } = req.body;
   console.log(title, text);
 
+  // Create new note object
   if (title && text) {
     const newNote = {
       title,
       text,
       id: uuid(),
     };
-    const noteString = JSON.stringify(newNote);
 
-    fs.writeFile("./db/db.json", noteString, (err) => {
+    // Read the db
+    const notesArr = JSON.parse(fs.readFileSync("./db/db.json"));
+    // Push new note object to db arr
+    notesArr.push(newNote);
+
+    // Translate notesArr back to string
+    const noteString = JSON.stringify(notesArr);
+
+    // Write the notes string to db
+    fs.writeFileSync("./db/db.json", noteString, (err) => {
       err
         ? console.log(err)
         : console.log(`Note for ${title} written to database`);
     });
+
     const response = {
       status: "success",
       body: newNote,
@@ -46,8 +57,6 @@ app.post("/api/notes", (req, res) => {
   } else {
     res.status(500).json("Error in posting note.");
   }
-
-  // return new note to client
 });
 
 app.get("*", (req, res) => {
