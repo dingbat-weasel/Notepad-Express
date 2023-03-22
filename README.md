@@ -49,7 +49,7 @@ Notepad Express is a web app created using Node and Express.js. It allows users 
 
 Simply hit the Get Started button and you're off.
 
-![screenshot](./public/assets/img/screencap.jpg)
+![screenshot](./public/assets/img/screencap.JPG)
 
 ## Dependencies
 
